@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="alert alert-success text-center">
+        Input data!
+    </div>
+    <form>
+        <div class="form-group">
+            <label for="inputText" class="h5">Input text</label>
+            <textarea class="form-control" id="inputText" rows="3"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="crc" id="predefinedCrc"
+                               value="predefinedCrc" checked>
+                        <label class="form-check-label" for="predefinedCrc">
+                            Predefined CRC
+                        </label>
+                    </div>
+                </div>
+                <fieldset id="listCrcTypes">
+                    <div class="form-group">
+                        <label for="typeCRC" class="h5 mb-4">Predefined CRC types:</label>
+                        <select class="form-control" id="typeCRC">
+                            <option th:each="crcCommand : ${listCrcCommands}"
+                                    th:value="${crcCommand.id}"
+                                    th:text="${crcCommand.name}">
+                            </option>
+                        </select>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="crc" id="customCrc"
+                               value="customCrc">
+                        <label class="form-check-label" for="customCrc">
+                            Custom CRC
+                        </label>
+                    </div>
+                </div>
+                <fieldset id="customCrcParameters" disabled>
+                    <label class="h5 mb-4">CRC detailed parameters:</label>
+                    <div class="form-group row">
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="inputReflected">
+                                <label class="form-check-label" for="inputReflected">
+                                    Input reflected
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="resultReflected">
+                                <label class="form-check-label" for="resultReflected">
+                                    Result reflected
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="polynomial" class="col col-form-label">Polynomial:</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="polynomial" placeholder="col-form-label">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="initialValue" class="col col-form-label">Initial Value:</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="initialValue" placeholder="col-form-label">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="finalXorValue" class="col col-form-label">Final Xor Value:</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="finalXorValue" placeholder="col-form-label">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script>
+    $("#predefinedCrc").click(function() {
+        $("#customCrcParameters").prop("disabled", true);
+        $("#listCrcTypes").prop("disabled", false);
+    });
+    $("#customCrc").click(function() {
+        $("#listCrcTypes").prop("disabled", true);
+        $("#customCrcParameters").prop("disabled", false);
+    });
+</script>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
