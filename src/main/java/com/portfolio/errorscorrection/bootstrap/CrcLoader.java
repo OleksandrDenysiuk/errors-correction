@@ -43,6 +43,6 @@ public class CrcLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         crcRepository.save(crc2);
 
-
+        log.debug("Crc load...");
     }
 }
