@@ -12,7 +12,8 @@
     <div class="alert alert-success text-center">
         Input data!
     </div>
-    <form>
+    <form action="/input/data/send" method="post">
+        <input type="hidden" name="name" id="name">
         <div class="form-group">
             <label for="inputText" class="h5">Input text</label>
             <textarea class="form-control" id="inputText" rows="3"></textarea>
@@ -50,7 +51,7 @@
                         </label>
                     </div>
                 </div>
-                <fieldset id="customCrcParameters" disabled>
+                <fieldset th:object="${crc}" id="customCrcParameters" disabled>
                     <label class="h5 mb-4">CRC detailed parameters:</label>
                     <div class="form-group row">
                         <div class="col">
@@ -71,7 +72,7 @@
                     <div class="form-group row">
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="inputReflected">
+                                <input class="form-check-input" type="checkbox" name="inputReflected" id="inputReflected">
                                 <label class="form-check-label" for="inputReflected">
                                     Input reflected
                                 </label>
@@ -79,7 +80,7 @@
                         </div>
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="resultReflected">
+                                <input class="form-check-input" type="checkbox" name="resultReflected" id="resultReflected">
                                 <label class="form-check-label" for="resultReflected">
                                     Result reflected
                                 </label>
@@ -89,19 +90,19 @@
                     <div class="form-group row">
                         <label for="polynomial" class="col col-form-label">Polynomial:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" id="polynomial" placeholder="col-form-label">
+                            <input type="text" class="form-control" th:field="*{polynomial}" id="polynomial" placeholder="0x0000">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="initialValue" class="col col-form-label">Initial Value:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" id="initialValue" placeholder="col-form-label">
+                            <input type="text" class="form-control" id="initialValue" th:field="*{initialValue}" placeholder="0x0000">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="finalXorValue" class="col col-form-label">Final Xor Value:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" id="finalXorValue" placeholder="col-form-label">
+                            <input type="text" class="form-control" id="finalXorValue" th:field="*{finalXorValue}" placeholder="0x0000">
                         </div>
                     </div>
                 </fieldset>
@@ -109,7 +110,7 @@
         </div>
 
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
@@ -118,7 +119,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-<script th:src="@{/js/formSwitching}"></script>
+<script th:src="@{/js/formSwitching.js}"></script>
 <script th:src="@{/js/setDataForm.js}"></script>
 </body>
 </html>

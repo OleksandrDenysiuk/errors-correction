@@ -1,17 +1,32 @@
 $(function () {
-    var typeCrc = $( "#typeCRC" );
+    var typeCrc = $("#typeCRC");
 
     setDataForm(typeCrc.val());
 
     typeCrc.change(function() {
         setDataForm($(this).val());
     });
+
+    $('#predefinedCrc').click(function () {
+        setDataForm(typeCrc.val());
+    });
+
+    $('#customCrc').click(function () {
+        $('#name').val("CustomCrc");
+    });
+
+    $('#submitBtn').click(function () {
+        $("#customCrcParameters").prop("disabled", false);
+    });
+
 });
 
 function setDataForm(id) {
     $.getJSON('http://localhost:8080/CrcCommand/' + id, function (response) {
 
         var bitLength = Number(response.bitLength);
+
+        $("#name").val(response.name);
 
         if(bitLength === 16){
             $("#bit16").prop("checked", true);
