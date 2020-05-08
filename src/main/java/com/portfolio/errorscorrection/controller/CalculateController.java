@@ -35,6 +35,9 @@ public class CalculateController {
     public String calculate(@RequestParam(name = "text") String text,
                             @ModelAttribute(name = "crc") CrcCommand crc,
                             Model model){
+        System.out.println((int)(long)Long.decode("0x814141AB".toLowerCase()));
+        long polynomial = 0x814141AB;
+        System.out.println(polynomial);
         model.addAttribute("message", messageService.generate(text,crcCommandToCrc.convert(crc)));
         return "formBrakeBits";
     }
