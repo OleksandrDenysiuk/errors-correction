@@ -20,9 +20,9 @@ public class CrcCommandToCrc implements Converter<CrcCommand, Crc> {
         crc.setBitLength(Integer.parseInt(crcCommand.getBitLength()));
         crc.setInputReflected(crcCommand.isInputReflected());
         crc.setResultReflected(crcCommand.isResultReflected());
-        crc.setPolynomial(Integer.decode(crcCommand.getPolynomial().toLowerCase()));
-        crc.setInitialValue(Integer.decode(crcCommand.getInitialValue().toLowerCase()));
-        crc.setFinalXorValue(Integer.decode(crcCommand.getFinalXorValue().toLowerCase()));
+        crc.setPolynomial((int)(long)Long.decode(crcCommand.getPolynomial().toLowerCase()));
+        crc.setInitialValue((int)(long)Long.decode(crcCommand.getInitialValue().toLowerCase()));
+        crc.setFinalXorValue((int)(long)Long.decode(crcCommand.getFinalXorValue().toLowerCase()));
         return crc;
     }
 }
