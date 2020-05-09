@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message {
-    String content;
-    String crc;
+    String content = "";
+    String crc = "";
     int[] controlBits;
 
     List<Byte> message = new ArrayList<>();
