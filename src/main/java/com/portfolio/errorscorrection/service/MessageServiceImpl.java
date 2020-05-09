@@ -26,9 +26,9 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
 
         for(int bytes : text.getBytes()){
-            message.setContent(intTo8BitString.convert(bytes));
-            message.addBits(message.getContent());
+            message.setContent(message.getContent() + intTo8BitString.convert(bytes));
         }
+        message.addBits(message.getContent());
 
         message.setCrc(intTo16BitString.convert(crcCalculateService.compute(text.getBytes())));
         message.addBits(message.getCrc());

@@ -39,6 +39,7 @@ public class CalculateController {
         long polynomial = 0x814141AB;
         System.out.println(polynomial);
         model.addAttribute("message", messageService.generate(text,crcCommandToCrc.convert(crc)));
+        model.addAttribute("text", text);
         return "formBrakeBits";
     }
 }
