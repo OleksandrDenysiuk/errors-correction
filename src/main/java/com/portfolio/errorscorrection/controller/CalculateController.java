@@ -2,6 +2,7 @@ package com.portfolio.errorscorrection.controller;
 
 import com.portfolio.errorscorrection.command.CrcCommand;
 import com.portfolio.errorscorrection.converter.CrcCommandToCrc;
+import com.portfolio.errorscorrection.model.Message;
 import com.portfolio.errorscorrection.service.CrcService;
 import com.portfolio.errorscorrection.service.MessageService;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class CalculateController {
@@ -34,12 +37,15 @@ public class CalculateController {
     @PostMapping("/input/data/send")
     public String calculate(@RequestParam(name = "text") String text,
                             @ModelAttribute(name = "crc") CrcCommand crc,
+                            HttpServletRequest request,
                             Model model){
-        System.out.println((int)(long)Long.decode("0x814141AB".toLowerCase()));
-        long polynomial = 0x814141AB;
-        System.out.println(polynomial);
-        model.addAttribute("message", messageService.generate(text,crcCommandToCrc.convert(crc)));
+
+        Message message = messageService.generate(text,crcCommandToCrc.convert(crc));
+
+        model.addAttribute("message", message);
+        request.getSession().setAttribute("SESSION_MESSAGE", message);
         model.addAttribute("text", text);
+
         return "formBrakeBits";
     }
 }
