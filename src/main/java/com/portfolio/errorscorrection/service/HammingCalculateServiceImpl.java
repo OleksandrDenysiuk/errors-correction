@@ -1,5 +1,6 @@
 package com.portfolio.errorscorrection.service;
 
+import com.portfolio.errorscorrection.model.Bit;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -70,52 +71,51 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
     }
 
     @Override
-    public int verification(List<Byte> message) {
-        int pos = 1;
+    public int verification(String bits) {
 
-        int result = 0;
+        char[] bitsArray = bits.toCharArray();
 
-        for (int i = 0; i < message.size();){
-            result += message.get(i);
-            i = (int)Math.pow(2, pos) - 1;
-            pos++;
+        int[] oldControlBits = new int[countAmountControlBits(bits.length())];
+
+
+        for (int i = 0, pos = 1; i < bitsArray.length; i = (int)Math.pow(2, pos) - 1, pos++){
+            oldControlBits[pos - 1] = Character.getNumericValue(bitsArray[i]);
         }
 
-        if(result % 2 == 0){
-            return 0;
-        }else {
-            return 1;
+        String deletedControlBits = "";
+
+        for (int i = 0, pos = 0; i < bitsArray.length; i++){
+            if(i == (int)Math.pow(2, pos) - 1){
+                pos++;
+            }else {
+                deletedControlBits += bitsArray[i];
+            }
         }
+
+        int[] newControlBits = calculation(deletedControlBits);
+
+        int position = 0;
+
+        for(int i = 0; i < oldControlBits.length; i++){
+            if(oldControlBits[i] != newControlBits[i]){
+                position += (i + 1);
+            }
+        }
+
+        return position;
     }
 
     @Override
-    public int calculatePositionBrokenBit(List<Byte> message) {
-        List<Byte> oldHamming = new ArrayList<>();
+    public List<Bit> deleteControlBits(List<Bit> bitList) {
+        List<Bit> massageCopy = new ArrayList<>(bitList);
 
-        String messageWithoutHamming = "";
+        int posCP = countAmountControlBits(bitList.size()) - 1;
 
-        for (int i = 0, pos = 0; i < message.size(); i++){
-            if(pos > message.size()){
-                break;
-            }
-            if((int)Math.pow(2, pos) - 1 == i){
-                oldHamming.add(message.get(i));
-                pos++;
-            }else{
-                messageWithoutHamming += message.get(i);
-            }
+        for (int i = 0; i < countAmountControlBits(bitList.size()); i++) {
+            massageCopy.remove((int) Math.pow(2, posCP) - 1);
+            posCP--;
         }
 
-        int[] newHamming = calculation(messageWithoutHamming);
-
-        int pos = 0;
-
-        for (int i = 0; i < newHamming.length; i++){
-            if(oldHamming.get(i) != newHamming[i]){
-                pos += Math.pow(2, i);
-            }
-        }
-
-        return pos;
+        return massageCopy;
     }
 }

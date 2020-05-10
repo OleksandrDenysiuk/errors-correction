@@ -17,13 +17,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Your input:</h5>
                     <p class="card-text" th:text="${text}">input</p>
-                    <h5 class="card-title">Your input in binary:</h5>
-                    <p class="card-text" th:text="*{content}">0000</p>
-                    <h5 class="card-title">Crc result:</h5>
-                    <p class="card-text" th:text="*{crc}">000000000</p>
-                    <h5 class="card-title">Control bits:</h5>
-                    <p class="card-text">
-                        <span th:each="bit : *{controlBits}" th:text="${bit} + ' '">0000</span>
+                    <h5 class="card-title">Input + <span class="text-warning">CRC</span> + <span class="text-primary">Control Bits</span>
+                    </h5>
+                    <p class="card-text" id="message">
+                <span th:each="bit : ${message.bits}" th:text="${bit.getBit()}"
+                      th:class="|${bit.status == 'CONTROL' ? 'text-primary' : ''} ${bit.status == 'CRC' ? 'text-warning' : ''}|"></span>
                     </p>
                 </div>
             </div>
@@ -31,20 +29,25 @@
         <div class="col">
             <div class="card" th:object="${crc}">
                 <div class="card-body">
-                    <h5 class="card-title">Crc name:</h5>
-                    <p class="card-text" th:text="*{name}">Custom crc</p>
-                    <h5 class="card-title">Bit length:</h5>
-                    <p class="card-text" th:text="*{bitLength}">16</p>
-                    <h5 class="card-title">Input reflected:</h5>
-                    <p class="card-text" th:text="*{inputReflected}">false</p>
-                    <h5 class="card-title">Result reflected:</h5>
-                    <p class="card-text" th:text="*{resultReflected}">false</p>
-                    <h5 class="card-title">Polynomial:</h5>
-                    <p class="card-text" th:text="*{polynomial}">0x0000</p>
-                    <h5 class="card-title">Initial Value:</h5>
-                    <p class="card-text" th:text="*{initialValue}">0x0000</p>
-                    <h5 class="card-title">Final Xor Value:</h5>
-                    <p class="card-text" th:text="*{finalXorValue}">0x0000</p>
+                    <h5 class="card-title text-center" th:text="*{name}">Crc name:</h5>
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title">Bit length:</h5>
+                            <p class="card-text" th:text="*{bitLength}">16</p>
+                            <h5 class="card-title">Input reflected:</h5>
+                            <p class="card-text" th:text="*{inputReflected}">false</p>
+                            <h5 class="card-title">Result reflected:</h5>
+                            <p class="card-text" th:text="*{resultReflected}">false</p>
+                        </div>
+                        <div class="col">
+                            <h5 class="card-title">Polynomial:</h5>
+                            <p class="card-text" th:text="*{polynomial}">0x0000</p>
+                            <h5 class="card-title">Initial Value:</h5>
+                            <p class="card-text" th:text="*{initialValue}">0x0000</p>
+                            <h5 class="card-title">Final Xor Value:</h5>
+                            <p class="card-text" th:text="*{finalXorValue}">0x0000</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,22 +55,14 @@
     <br/>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Input + <span class="text-warning">CRC</span> + <span class="text-primary">Control Bits</span>
-            </h5>
-            <p class="card-text" id="message"></p>
-        </div>
-    </div>
-    <br/>
-    <div class="card">
-        <div class="card-body">
             <h5 class="card-title">Bits to brake:</h5>
-            <form method="post" th:action="@{/brake/bits/{message}(crc = ${message.crc})}" id="form" th:object="${message}">
+            <form method="post" th:action="@{/brake/bits}" id="form" th:object="${message}">
                 <div class="form-group">
                     <div class="input-group">
-                        <input id="first" type="text" class="form-control">
-                        <input id="second" type="text" class="form-control">
-                        <input id="third" type="text" class="form-control">
-                        <input id="fourth" type="text" class="form-control">
+                        <input name="first" type="text" class="form-control">
+                        <input name="second" type="text" class="form-control">
+                        <input name="third" type="text" class="form-control">
+                        <input name="fourth" type="text" class="form-control">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -83,19 +78,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-<script th:inline="javascript">
-    $.each(Array.from([[${message.content}]]), function (index, value) {
-        $("#message").append("<span class='text'>" + value + "</span>");
-    });
-
-    $.each(Array.from([[${message.crc}]]), function (index, value) {
-        $("#message").append("<span class='text-warning text'>" + value + "</span>");
-    });
-
-    $.each(Array.from([[${message.controlBits}]]), function (index, value) {
-        $("<span class='text-primary'>" + value + "</span>").insertBefore($(".text")[Math.pow(2, index) - 1]);
-    });
-</script>
 </body>
 </html>
 </body>
