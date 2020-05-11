@@ -44,6 +44,7 @@ public class CalculateController {
 
         model.addAttribute("message", message);
         request.getSession().setAttribute("SESSION_MESSAGE", message);
+        request.getSession().setAttribute("SESSION_CRC", crcCommandToCrc.convert(crc));
         model.addAttribute("text", text);
 
         return "formBrakeBits";
