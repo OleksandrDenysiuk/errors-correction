@@ -17,7 +17,7 @@
                 +
                 <span class="text-danger">Broken bits</span></h5>
             <p class="card-text" id="message">
-                <span th:each="bit : ${brokenMessage}" th:text="${bit.getBit()}"
+                <span th:each="bit : ${brokenMessage.bits}" th:text="${bit.getBit()}"
                       th:class="|${bit.status == 'CONTROL' ? 'text-primary' : ''}
                       ${bit.status == 'CRC' ? 'text-warning' : ''}
                       ${bit.status == 'BROKEN' ? 'text-danger' : ''}|"></span>
