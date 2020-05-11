@@ -1,7 +1,5 @@
 package com.portfolio.errorscorrection.service;
 
-import com.portfolio.errorscorrection.model.Bit;
-
 import java.util.List;
 
 public interface HammingCalculateService {
@@ -9,5 +7,5 @@ public interface HammingCalculateService {
     int[] calculation(String bytes);
     int[] setPositionControlPoints(String bytes);
     int verification(String message);
-    List<Bit> deleteControlBits(List<Bit> bitList);
+    List<Byte> deleteControlBits(List<Byte> bitList);
 }

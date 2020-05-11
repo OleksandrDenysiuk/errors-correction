@@ -1,5 +1,6 @@
 package com.portfolio.errorscorrection.controller;
 
+import com.portfolio.errorscorrection.model.Crc;
 import com.portfolio.errorscorrection.model.Message;
 import com.portfolio.errorscorrection.service.CrcCalculateService;
 import com.portfolio.errorscorrection.service.HammingCalculateService;
@@ -9,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class VerificationController {
@@ -27,29 +28,35 @@ public class VerificationController {
     }
 
     @GetMapping("/verify/message")
-    public String verifyMessage(HttpServletRequest request, Model model){
-
+    public String verifyMessage(HttpServletRequest request, Model model) {
         Message message = (Message) request.getSession().getAttribute("SESSION_BROKEN_MESSAGE");
+        Crc crc = (Crc) request.getSession().getAttribute("SESSION_CRC");
 
-        model.addAttribute("brokenMessage", message.getBits());
+        model.addAttribute("brokenMessage", message);
 
         int result = hammingCalculateService.verification(message.getBitsString());
 
-        if(result == 0){
+        if (result == 0) {
             model.addAttribute("resultHamming", "Everything`s okay!");
-        }else{
+        } else {
             model.addAttribute("resultHamming", "Something is wrong on position: " + result);
-            model.addAttribute("hammingFixedMessage", new ArrayList<>(messageService.fixBit(message, result).getBits()));
+            model.addAttribute("hammingFixedMessage", messageService.fixBit(message.getBits(), result));
         }
 
-        message.setBits(hammingCalculateService.deleteControlBits(message.getBits()));
+        List<Byte> bits = hammingCalculateService.deleteControlBits(message.getByteList());
 
-        int resultCrc = crcCalculateService.compute(message.getByteArray());
+        byte[] bytes = new byte[bits.size()];
 
-        if(resultCrc == 0){
-            model.addAttribute("resultCrc", "Everything okay!");
-        }else {
-            model.addAttribute("resultCrc", "Something wrong!");
+        for(int i = 0; i < bytes.length; i++) {
+            bytes[i] = bits.get(i);
+        }
+
+        int resultCrc = crcCalculateService.compute(bytes, crc);
+
+        if (resultCrc == 0) {
+            model.addAttribute("resultCrc", "Everything okay! Result: 0x" + Integer.toHexString(resultCrc));
+        } else {
+            model.addAttribute("resultCrc", "Something wrong! Result: 0x" + Integer.toHexString(resultCrc));
         }
 
         return "result";

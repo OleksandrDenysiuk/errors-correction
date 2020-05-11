@@ -1,6 +1,5 @@
 package com.portfolio.errorscorrection.service;
 
-import com.portfolio.errorscorrection.model.Bit;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -106,8 +105,9 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
     }
 
     @Override
-    public List<Bit> deleteControlBits(List<Bit> bitList) {
-        List<Bit> massageCopy = new ArrayList<>(bitList);
+    public List<Byte> deleteControlBits(List<Byte> bitList) {
+
+        List<Byte> massageCopy = new ArrayList<>(bitList);
 
         int posCP = countAmountControlBits(bitList.size()) - 1;
 
