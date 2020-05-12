@@ -37,10 +37,9 @@ public class Crc16BitCalculateServiceImpl implements Crc16BitCalculateService{
 
         int initialValue = crc.getInitialValue();
 
-        for (byte b : bytes)
-        {
+        for (byte b : bytes) {
             if(crc.isInputReflected()){
-                b = (byte) Reflect8(b);
+                b = (byte) reflect8(b);
             }
             /* XOR-in next input byte into MSB of crc, that's our new intermediate divident */
             byte pos = (byte)((initialValue >> 8) ^ b); /* equal: ((crc ^ (b << 8)) >> 8) */
@@ -49,12 +48,13 @@ public class Crc16BitCalculateServiceImpl implements Crc16BitCalculateService{
         }
 
         if(crc.isResultReflected()){
-            initialValue = Reflect16((short) initialValue);
+            initialValue = reflect16((short) initialValue);
         }
+
         return initialValue ^ crc.getFinalXorValue();
     }
 
-    private short Reflect16(short val) {
+    private short reflect16(short val) {
         short resVal = 0;
 
         for (int i = 0; i < 16; i++) {
@@ -66,7 +66,8 @@ public class Crc16BitCalculateServiceImpl implements Crc16BitCalculateService{
         return resVal;
     }
 
-    private short Reflect8(short val) {
+    private short reflect8(short val) {
+
         short resVal = 0;
 
         for (int i = 0; i < 8; i++) {
