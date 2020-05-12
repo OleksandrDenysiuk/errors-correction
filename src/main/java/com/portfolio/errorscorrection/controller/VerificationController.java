@@ -1,29 +1,26 @@
 package com.portfolio.errorscorrection.controller;
 
+import com.portfolio.errorscorrection.model.Bit;
 import com.portfolio.errorscorrection.model.Crc;
 import com.portfolio.errorscorrection.model.Message;
-import com.portfolio.errorscorrection.service.CrcCalculateService;
-import com.portfolio.errorscorrection.service.HammingCalculateService;
 import com.portfolio.errorscorrection.service.MessageService;
+import com.portfolio.errorscorrection.service.VerificationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class VerificationController {
 
-    private final CrcCalculateService crcCalculateService;
-    private final HammingCalculateService hammingCalculateService;
+    private final VerificationService verificationService;
     private final MessageService messageService;
 
-    public VerificationController(CrcCalculateService crcCalculateService,
-                                  HammingCalculateService hammingCalculateService,
-                                  MessageService messageService) {
-        this.crcCalculateService = crcCalculateService;
-        this.hammingCalculateService = hammingCalculateService;
+    public VerificationController(VerificationService verificationService, MessageService messageService) {
+        this.verificationService = verificationService;
         this.messageService = messageService;
     }
 
@@ -32,26 +29,20 @@ public class VerificationController {
         Message message = (Message) request.getSession().getAttribute("SESSION_BROKEN_MESSAGE");
         Crc crc = (Crc) request.getSession().getAttribute("SESSION_CRC");
 
-        model.addAttribute("brokenMessage", message);
+        List<Bit> brokenMessage = new ArrayList<>(message.getBits());
 
-        int result = hammingCalculateService.verification(message.getBitsString());
+        model.addAttribute("brokenMessage", brokenMessage);
+
+        int result = verificationService.verifyHamming(message);
 
         if (result == 0) {
             model.addAttribute("resultHamming", "Everything`s okay!");
         } else {
             model.addAttribute("resultHamming", "Something is wrong on position: " + result);
-            model.addAttribute("hammingFixedMessage", messageService.fixBit(message.getBits(), result));
+            model.addAttribute("hammingFixedMessage", messageService.fixBit(message, result));
         }
 
-        List<Byte> bits = hammingCalculateService.deleteControlBits(message.getByteList());
-
-        byte[] bytes = new byte[bits.size()];
-
-        for(int i = 0; i < bytes.length; i++) {
-            bytes[i] = bits.get(i);
-        }
-
-        int resultCrc = crcCalculateService.compute(bytes, crc);
+        int resultCrc = verificationService.verifyCrc(message, crc);
 
         if (resultCrc == 0) {
             model.addAttribute("resultCrc", "Everything okay! Result: 0x" + Integer.toHexString(resultCrc));

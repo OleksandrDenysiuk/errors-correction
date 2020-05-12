@@ -36,6 +36,20 @@ public class Message {
         return byteList;
     }
 
+    public void brakeBit(int position){
+        Bit currentBit = this.getBits().get(position - 1);
+        currentBit.setBit((byte) (this.getBits().get(position - 1).getBit() ^ 1));
+        currentBit.setStatus("BROKEN");
+    }
+
+    public void fixBit(int position){
+        Bit broken = this.getBits().get(position - 1);
+        Bit fix = new Bit();
+        fix.setBit(broken.getBit() ^ 1);
+        fix.setStatus("FIXED");
+        this.getBits().set(position - 1,  fix);
+    }
+
     public byte[] getByteArray(){
 
         byte[] bytes = new byte[bits.size()];

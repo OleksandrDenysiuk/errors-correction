@@ -36,7 +36,13 @@ public class MessageServiceImpl implements MessageService {
             message.addBitsWithStatus(intTo8BitString.convert(bytes), "INPUT");
         }
 
-        message.addBitsWithStatus(intTo32BitsString.convert(crcCalculateService.compute(text.getBytes(), crc)), "CRC");
+        int crcResult = crcCalculateService.compute(text.getBytes(), crc);
+        if(crc.getBitLength() == 16){
+            message.addBitsWithStatus(intTo16BitString.convert(crcResult), "CRC");
+        }else {
+            message.addBitsWithStatus(intTo32BitsString.convert(crcResult), "CRC");
+        }
+
 
         int posCP = 0;
 
@@ -53,25 +59,31 @@ public class MessageServiceImpl implements MessageService {
                              Message message) {
 
         for (int position : bitPositionList) {
-            Bit currentBit = message.getBits().get(position - 1);
-            currentBit.setBit((byte) (message.getBits().get(position - 1).getBit() ^ 1));
-            currentBit.setStatus("BROKEN");
+            message.brakeBit(position);
         }
 
         return message;
     }
 
     @Override
-    public List<Bit> fixBit(List<Bit> bitList, int position) {
+    public Message fixBit(Message message, int position) {
+            message.fixBit(position);
+        return message;
+    }
 
-        List<Bit> copy = new ArrayList<>(bitList);
+    @Override
+    public List<Byte> deleteControlBits(List<Byte> bitList) {
 
-        Bit broken = copy.get(position - 1);
-        Bit fix = new Bit();
-        fix.setBit(broken.getBit() ^ 1);
-        fix.setStatus("FIXED");
-        copy.set(position - 1,  fix);
+        List<Byte> massageCopy = new ArrayList<>(bitList);
+        int amount = hammingCalculateService.countAmountControlBits(bitList.size());
 
-        return copy;
+        int posCP = amount - 1;
+
+        for (int i = 0; i < amount; i++) {
+            massageCopy.remove((int) Math.pow(2, posCP) - 1);
+            posCP--;
+        }
+
+        return massageCopy;
     }
 }
