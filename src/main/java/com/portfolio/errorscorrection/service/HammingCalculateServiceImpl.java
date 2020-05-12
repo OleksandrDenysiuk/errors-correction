@@ -2,9 +2,6 @@ package com.portfolio.errorscorrection.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class HammingCalculateServiceImpl implements HammingCalculateService {
     @Override
@@ -102,20 +99,5 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
         }
 
         return position;
-    }
-
-    @Override
-    public List<Byte> deleteControlBits(List<Byte> bitList) {
-
-        List<Byte> massageCopy = new ArrayList<>(bitList);
-
-        int posCP = countAmountControlBits(bitList.size()) - 1;
-
-        for (int i = 0; i < countAmountControlBits(bitList.size()); i++) {
-            massageCopy.remove((int) Math.pow(2, posCP) - 1);
-            posCP--;
-        }
-
-        return massageCopy;
     }
 }
