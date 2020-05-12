@@ -17,7 +17,7 @@
                 +
                 <span class="text-danger">Broken bits</span></h5>
             <p class="card-text" id="message">
-                <span th:each="bit : ${brokenMessage.bits}" th:text="${bit.getBit()}"
+                <span th:each="bit : ${brokenMessage}" th:text="${bit.getBit()}"
                       th:class="|${bit.status == 'CONTROL' ? 'text-primary' : ''}
                       ${bit.status == 'CRC' ? 'text-warning' : ''}
                       ${bit.status == 'BROKEN' ? 'text-danger' : ''}|"></span>
@@ -36,7 +36,7 @@
                     <div th:if="${hammingFixedMessage}">
                         <h5 class="card-title">Message after fixing:</h5>
                         <p class="card-text"><span
-                                th:each="bit : ${hammingFixedMessage}" th:text="${bit.getBit()}"
+                                th:each="bit : ${hammingFixedMessage.bits}" th:text="${bit.getBit()}"
                                 th:class="|${bit.status == 'CONTROL' ? 'text-primary' : ''}
                                  ${bit.status == 'CRC' ? 'text-warning' : ''}
                                  ${bit.status == 'BROKEN' ? 'text-danger' : ''}
@@ -56,6 +56,8 @@
             </div>
         </div>
     </div>
+    <br/>
+    <a href="/input" class="btn btn-primary">Try again!</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -63,6 +65,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script th:src="@{/js/verificationData.js}"></script>
 </body>
 </html>
 </body>
