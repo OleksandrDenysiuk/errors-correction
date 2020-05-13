@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class Crc16BitCalculateServiceImplTest {
 
@@ -70,6 +71,38 @@ class Crc16BitCalculateServiceImplTest {
     }
 
     @Test
-    void reflect16() {
+    void computeVerificationPassed() {
+        Crc crc = new Crc();
+        crc.setName("Crc16");
+        crc.setBitLength(16);
+        crc.setInputReflected(true);
+        crc.setResultReflected(false);
+        crc.setPolynomial(0x1021);
+        crc.setInitialValue(0x0);
+        crc.setFinalXorValue(0x0);
+
+        byte[] input = {0,0,1,1,0,0,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,0,1,0};
+
+        int result = crcService.compute(input, crc);
+
+        assertEquals("0", Integer.toHexString(result));
+    }
+
+    @Test
+    void computeVerificationNotPassed() {
+        Crc crc = new Crc();
+        crc.setName("Crc16");
+        crc.setBitLength(16);
+        crc.setInputReflected(true);
+        crc.setResultReflected(false);
+        crc.setPolynomial(0x1021);
+        crc.setInitialValue(0x0);
+        crc.setFinalXorValue(0x0);
+
+        byte[] input = {1,0,1,1,0,0,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,0,1,0};
+
+        int result = crcService.compute(input, crc);
+
+        assertNotEquals("0", Integer.toHexString(result));
     }
 }
