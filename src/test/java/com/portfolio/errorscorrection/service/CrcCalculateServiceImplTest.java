@@ -4,8 +4,11 @@ import com.portfolio.errorscorrection.model.Crc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class CrcCalculateServiceImplTest {
 
@@ -16,157 +19,48 @@ class CrcCalculateServiceImplTest {
     Crc32BitCalculateService crc32BitCalculateService;
 
     CrcCalculateService crcCalculateService;
-    Crc crc;
-    int[] crcTable;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.initMocks(this);
         crcCalculateService = new CrcCalculateServiceImpl(crc16BitCalculateService, crc32BitCalculateService);
     }
 
     @Test
-    void calculateCrcTable() {
-    }
-
-    @Test
-    void compute() {
-    }
-
-    /*@Test
-    void calculateCrcTableCustom16Bit() {
-        crcTable = new int[]{0, 4129, 8258, 12387, 16516, 20645, 24774, 28903,
-                -32504, -28375, -24246, -20117, -15988, -11859, -7730, -3601,
-                4657, 528, 12915, 8786, 21173, 17044, 29431, 25302,
-                -27847, -31976, -19589, -23718, -11331, -15460, -3073,
-                -7202, 9314, 13379, 1056, 5121, 25830, 29895, 17572,
-                21637, -23190, -19125, -31448, -27383, -6674, -2609, -14932,
-                -10867, 13907, 9842, 5649, 1584, 30423, 26358, 22165,
-                18100, -18597, -22662, -26855, -30920, -2081, -6146, -10339,
-                -14404, 18628, 22757, 26758, 30887, 2112, 6241, 10242,
-                14371, -13876, -9747, -5746, -1617, -30392, -26263, -22262,
-                -18133, 23285, 19156, 31415, 27286, 6769, 2640, 14899, 10770,
-                -9219, -13348, -1089, -5218, -25735, -29864, -17605, -21734,
-                27814, 31879, 19684, 23749, 11298, 15363, 3168, 7233, -4690,
-                -625, -12820, -8755, -21206, -17141, -29336, -25271, 32407,
-                28342, 24277, 20212, 15891, 11826, 7761, 3696, -97, -4162, -8227,
-                -12292, -16613, -20678, -24743, -28808, -28280, -32343, -20022,
-                -24085, -12020, -16083, -3762, -7825, 4224, 161, 12482, 8419, 20484,
-                16421, 28742, 24679, -31815, -27752, -23557, -19494, -15555, -11492,
-                -7297, -3234, 689, 4752, 8947, 13010, 16949, 21012, 25207, 29270,
-                -18966, -23093, -27224, -31351, -2706, -6833, -10964, -15091, 13538,
-                9411, 5280, 1153, 29798, 25671, 21540, 17413, -22565, -18438, -30823,
-                -26696, -6305, -2178, -14563, -10436, 9939, 14066, 1681, 5808, 26199,
-                30326, 17941, 22068, -9908, -13971, -1778, -5841, -26168, -30231, -18038,
-                -22101, 22596, 18533, 30726, 26663, 6336, 2273, 14466, 10403, -13443, -9380,
-                -5313, -1250, -29703, -25640, -21573, -17510, 19061, 23124, 27191, 31254, 2801,
-                6864, 10931, 14994, -722, -4849, -8852, -12979, -16982, -21109, -25112, -29239,
-                31782, 27655, 23652, 19525, 15522, 11395, 7392, 3265, -4321, -194, -12451, -8324,
-                -20581, -16454, -28711, -24584, 28183, 32310, 20053, 24180, 11923, 16050, 3793, 7920};
-
-        int[] arrayReturn = crcCalculateService.calculateCrcTable(0x1021, 16);
-
-        assertEquals(Arrays.toString(crcTable),Arrays.toString(arrayReturn));
-    }
-
-    @Test
-    void calculateCrcTableCustom32Bit() {
-        crcTable = new int[]{0, -2126429781, -2084322563, 42107734, -2033793967, 126322170, 84215468, -2075900153,
-                -1932736247, 227379362, 252644340, -1907471777, 168430936, -1957999373, -1983262811, 143166990,
-                -1730620487, 429494802, 454758724, -1705357073, 505288680, -1621141949, -1646406379, 480023742,
-                336861872, -1789568229, -1747462067, 378968550, -1831674143, 328441674, 286333980, -1873781321,
-                -1326389543, 833726322, 858989604, -1301125745, 909517448, -1216912605, -1242177419, 884253150,
-                1010577360, -1115853189, -1073746643, 1052683398, -1157960831, 1002154538, 960047484, -1200068393,
-                673723744, -1452706613, -1410599011, 715830838, -1360072399, 800043162, 757937100, -1402178969,
-                -1528497047, 631619010, 656883348, -1503232193, 572667960, -1553761901, -1579025723, 547404654,
-                -526349287, 1642188210, 1667452644, -501084337, 1717979208, -416871965, -442135883, 1692715806,
-                1819034896, -315816773, -273709075, 1861142086, -357924543, 1810612458, 1768506300, -400031209,
-                2021154720, -113697269, -71590563, 2063260918, -21062671, 2147474010, 2105366796, -63170393, -189491543,
-                1979045634, 2004309076, -164227585, 1920094968, -214756525, -240021499, 1894830510, 1347447488,
-                -787403925, -745297859, 1389554070, -694767983, 1473769274, 1431661676, -736875065, -593714231,
-                1574822498, 1600086324, -568450913, 1515874200, -618977741, -644242075, 1490609358, -930563719,
-                1237973202, 1263238020, -905299409, 1313766696, -821085053, -846348331, 1288502910, 1145335920,
-                -989515301, -947408243, 1187443494, -1031621599, 1136915850, 1094809308, -1073727625, 1073764761,
-                -1052698574, -1010590876, 1115871951, -960062008, 1200086115, 1157979957, -1002168674, -859008880,
-                1301139771, 1326404205, -833743930, 1242191041, -884271766, -909535684, 1216927639, -656897504,
-                1503251339, 1528514781, -631633546, 1579044465, -547418150, -572683124, 1553780007, 1410614057,
-                -715849086, -673742380, 1452720255, -757954696, 1402193619, 1360086405, -800062418, -252657856,
-                1907490539, 1932754365, -227394538, 1983281937, -143181126, -168445460, 1958017095, 2084337225,
-                -42125342, -19276, 2126443807, -84233704, 2075915187, 2033807589, -126340786, 1747479801, -378983086,
-                -336876028, 1789587375, -286349144, 1873799427, 1831692885, -328455170, -454777360, 1705370715,
-                1730635533, -429513050, 1646420385, -480042998, -505306276, 1621156599, -1600072320, 568431659,
-                593696637, -1574807850, 644223441, -1490595718, -1515859156, 618959495, 745282697, -1389535966,
-                -1347428748, 787390431, -1431643944, 736860531, 694753829, -1473750130, 947390009, -1187428462,
-                -1145322300, 989496687, -1094794648, 1073710019, 1031602325, -1136901826, -1263218896, 905285275,
-                930549197, -1237955482, 846334817, -1288484150, -1313748580, 821069879, 273691481, -1861127438,
-                -1819020892, 315797519, -1768491256, 400012963, 357905909, -1810598818, -1667433904, 501070843,
-                526334125, -1642170106, 442121729, -1692696662, -1717961476, 416857431, -2004295456, 164208971,
-                189473309, -1979030602, 240002225, -1894816486, -1920080308, 214738919, 71576041, -2063243198,
-                -2021135596, 113683135, -2105348680, 63155219, 21049157, -2147455250};
-        ;
-
-        int[] arrayReturn = crcCalculateService.calculateCrcTable(0x814141AB, 32);
-
-        assertEquals(Arrays.toString(crcTable),Arrays.toString(arrayReturn));
-    }*/
-
-    @Test
     void compute16Bit() {
+
+        int crcResult = 1000;
+
         Crc crc = new Crc();
-        crc.setName("Crc16");
         crc.setBitLength(16);
-        crc.setInputReflected(false);
-        crc.setResultReflected(false);
-        crc.setPolynomial(0x1021);
-        crc.setInitialValue(0x0);
-        crc.setFinalXorValue(0x0);
 
-        String input = "hello";
+        byte[] bytes = {1,2};
 
-        int result = crcCalculateService.compute(input.getBytes(), crc);
+        when(crc16BitCalculateService.compute(any(),any(Crc.class))).thenReturn(crcResult);
 
-        assertEquals(-15518, result);
-    }
+        assertEquals(crcResult, crcCalculateService.compute(bytes,crc));
 
-    @Test
-    void compute16BitReflected() {
-        Crc crc = new Crc();
-        crc.setName("Crc16");
-        crc.setBitLength(16);
-        crc.setInputReflected(false);
-        crc.setResultReflected(false);
-        crc.setPolynomial(0x1021);
-        crc.setInitialValue(0x1021);
-        crc.setFinalXorValue(0x1021);
-
-        String input = "hello";
-
-        int result = crcCalculateService.compute(input.getBytes(), crc);
-
-        System.out.println(Integer.toHexString(result));
+        verify(crc16BitCalculateService,times(1)).compute(any(),any(Crc.class));
+        verify(crc32BitCalculateService,times(0)).compute(any(),any(Crc.class));
     }
 
     @Test
     void compute32Bit() {
+
+        int crcResult = 1000;
+
         Crc crc = new Crc();
-        crc.setName("Crc32_Q");
         crc.setBitLength(32);
-        crc.setInputReflected(false);
-        crc.setResultReflected(false);
-        crc.setPolynomial(0x814141AB);
-        crc.setInitialValue(0x0);
-        crc.setFinalXorValue(0x0);
-        String input = "hello";
 
-        int result = crcCalculateService.compute(input.getBytes(), crc);
+        byte[] bytes = {1,2};
 
-        assertEquals(-1334282108, result);
+        when(crc32BitCalculateService.compute(any(),any(Crc.class))).thenReturn(crcResult);
+
+        assertEquals(crcResult, crcCalculateService.compute(bytes,crc));
+
+        verify(crc16BitCalculateService,times(0)).compute(any(),any(Crc.class));
+        verify(crc32BitCalculateService,times(1)).compute(any(),any(Crc.class));
     }
 
-    @Test
-    void reverse() {
-        int number1 = 0b10000010;
 
-        System.out.println(Integer.toBinaryString(Integer.reverse(number1)));
-
-    }
 }
