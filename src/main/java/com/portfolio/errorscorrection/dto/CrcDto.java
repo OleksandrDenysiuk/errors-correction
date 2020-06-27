@@ -1,13 +1,13 @@
-package com.portfolio.errorscorrection.command;
+package com.portfolio.errorscorrection.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class CrcCommand{
+@AllArgsConstructor
+@Builder
+public class CrcDto {
 
     private Long id;
     private String name;
