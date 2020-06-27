@@ -1,12 +1,13 @@
 package com.portfolio.errorscorrection.service;
 
-import com.portfolio.errorscorrection.command.CrcCommand;
-import com.portfolio.errorscorrection.model.Crc;
+import com.portfolio.errorscorrection.dto.CrcDto;
 
-import java.util.Set;
+import java.util.List;
 
 public interface CrcService {
-    Crc findById(Long id);
-    Set<CrcCommand> findCrcCommandAll();
-    CrcCommand findCrcCommandById(Long id);
+    CrcDto getOneById(Long id);
+    List<CrcDto> getAll();
+    CrcDto create(CrcDto crcDto);
+    CrcDto update(CrcDto crcDto);
+    void delete(Long crcId);
 }
