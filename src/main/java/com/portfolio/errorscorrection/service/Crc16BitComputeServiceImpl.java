@@ -1,12 +1,14 @@
 package com.portfolio.errorscorrection.service;
 
 import com.portfolio.errorscorrection.model.Crc;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Crc16BitCalculateServiceImpl implements Crc16BitCalculateService{
+@Primary
+public class Crc16BitComputeServiceImpl implements CrcComputeService {
 
-    private int[] calculateCrcTable16Bit(short polynomial) {
+    private int[] calculateCrcTable(short polynomial) {
 
         int[] crcTable16 = new int[256];
 
@@ -33,7 +35,7 @@ public class Crc16BitCalculateServiceImpl implements Crc16BitCalculateService{
 
     @Override
     public int compute(byte[] bytes, Crc crc) {
-        int[] crcTable16 = calculateCrcTable16Bit((short) crc.getPolynomial());
+        int[] crcTable16 = calculateCrcTable((short) crc.getPolynomial());
 
         int initialValue = crc.getInitialValue();
 

@@ -4,9 +4,9 @@ import com.portfolio.errorscorrection.model.Crc;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Crc32BitCalculateServiceImpl implements Crc32BitCalculateService {
+public class Crc32BitComputeServiceImpl implements CrcComputeService {
 
-    private int[] calculateCrcTable32Bit(int polynomial) {
+    private int[] calculateCrcTable(int polynomial) {
 
         int[] crcTable32 = new int[256];
 
@@ -29,7 +29,7 @@ public class Crc32BitCalculateServiceImpl implements Crc32BitCalculateService {
 
     @Override
     public int compute(byte[] bytes, Crc crc) {
-        int[] crcTable = calculateCrcTable32Bit(crc.getPolynomial());
+        int[] crcTable = calculateCrcTable(crc.getPolynomial());
 
         int initialValue = crc.getInitialValue();
 
