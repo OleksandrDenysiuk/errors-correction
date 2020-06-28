@@ -13,7 +13,7 @@ public class IndexController {
 
     @GetMapping("/crc")
     public String loadCrcPage(){
-        return "crc";
+        return "simulation";
     }
 
     @GetMapping("/crc/result")
