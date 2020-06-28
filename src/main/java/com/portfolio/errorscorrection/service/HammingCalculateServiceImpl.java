@@ -98,6 +98,6 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
             }
         }
 
-        return position;
+        return position + 1;
     }
 }
