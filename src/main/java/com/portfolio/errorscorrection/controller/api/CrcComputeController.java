@@ -19,10 +19,10 @@ public class CrcComputeController {
         this.crcDtoToCrc = crcDtoToCrc;
     }
 
-    @PostMapping("/crc/{crcId}/compute")
+    @GetMapping("/crc/{crcId}/compute")
     public @ResponseBody
-    int compute(@RequestParam String message,
-                   @PathVariable Long crcId) {
+    int compute(@RequestParam("message") String message,
+                @PathVariable Long crcId) {
         Crc crc = crcDtoToCrc.convert(crcService.getOneById(crcId));
         return crcComputeService.compute(message.getBytes(), crc);
     }
