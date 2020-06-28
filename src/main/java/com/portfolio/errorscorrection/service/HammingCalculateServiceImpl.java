@@ -1,11 +1,48 @@
 package com.portfolio.errorscorrection.service;
 
+import com.portfolio.errorscorrection.model.Bit;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class HammingCalculateServiceImpl implements HammingCalculateService {
     @Override
-    public int countAmountControlBits(int length) {
+    public List<Bit> setControlBits(List<Bit> bitList) {
+        StringBuilder bits = new StringBuilder();
+        for(Bit bit : bitList){
+            bits.append(bit.getValue());
+        }
+
+        int[] positions = calculation(bits.toString());
+
+        for (int i = 0; i < positions.length; i++){
+            bitList.set((int)Math.pow(2, i), new Bit(positions[i],"CONTROL"));
+        }
+
+        return bitList;
+    }
+
+    @Override
+    public List<Bit> deleteControlBits(List<Bit> bitList) {
+        for (int i = 0; i < bitList.size(); i++){
+            bitList.remove((int)Math.pow(2, i));
+        }
+
+        return bitList;
+    }
+
+    @Override
+    public int verify(List<Bit> bitList) {
+        StringBuilder bits = new StringBuilder();
+        for(Bit bit : bitList){
+            bits.append(bit.getValue());
+        }
+
+        return verification(bits.toString());
+    }
+
+    private int countAmountControlBits(int length) {
         int amount = 0;
 
         while (Math.pow(2, amount) <= length) {
@@ -15,8 +52,7 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
         return amount;
     }
 
-    @Override
-    public int[] calculation(String bytes) {
+    private int[] calculation(String bytes) {
         int[] ar =  setPositionControlPoints(bytes);
         int r = countAmountControlBits(bytes.length());
 
@@ -44,8 +80,7 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
         return bits;
     }
 
-    @Override
-    public int[] setPositionControlPoints(String bytes) {
+    private int[] setPositionControlPoints(String bytes) {
         int amount =  countAmountControlBits(bytes.length());
 
         int[] hamming = new int[bytes.length() + amount];
@@ -66,8 +101,7 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
         return hamming;
     }
 
-    @Override
-    public int verification(String bits) {
+    private int verification(String bits) {
 
         char[] bitsArray = bits.toCharArray();
 
@@ -98,6 +132,6 @@ public class HammingCalculateServiceImpl implements HammingCalculateService {
             }
         }
 
-        return position + 1;
+        return position;
     }
 }
