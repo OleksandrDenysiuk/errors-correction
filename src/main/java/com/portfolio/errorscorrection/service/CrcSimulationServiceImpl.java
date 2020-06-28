@@ -6,10 +6,12 @@ import com.portfolio.errorscorrection.converter.CrcDtoToCrc;
 import com.portfolio.errorscorrection.dto.CrcDto;
 import com.portfolio.errorscorrection.model.Bit;
 import com.portfolio.errorscorrection.model.Crc;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CrcSimulationServiceImpl implements CrcSimulationService{
     private final CrcDtoToCrc crcDtoToCrc;
 

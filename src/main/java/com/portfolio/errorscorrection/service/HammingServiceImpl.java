@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HammingCalculateServiceImpl implements HammingCalculateService {
+public class HammingServiceImpl implements HammingService {
     @Override
     public List<Bit> setControlBits(List<Bit> bitList) {
         StringBuilder bits = new StringBuilder();
