@@ -7,7 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     @GetMapping("/")
-    public String loadPage(){
+    public String loadStartPage(){
         return "index";
+    }
+
+    @GetMapping("/crc")
+    public String loadCrcPage(){
+        return "crc";
+    }
+
+    @GetMapping("/crc/result")
+    public String loadCrcResultPage(){
+        return "crcResult";
     }
 }
