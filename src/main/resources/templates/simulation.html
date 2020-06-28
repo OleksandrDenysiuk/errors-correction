@@ -12,12 +12,12 @@
     <div class="alert alert-success text-center">
         Input data!
     </div>
+    <input type="hidden" name="name" id="name">
+    <div class="form-group">
+        <label for="inputText" class="h5">Input text</label>
+        <textarea class="form-control" id="inputText" rows="3" name="text"></textarea>
+    </div>
     <form action="/input/data/send" method="post">
-        <input type="hidden" name="name" id="name">
-        <div class="form-group">
-            <label for="inputText" class="h5">Input text</label>
-            <textarea class="form-control" id="inputText" rows="3" name="text"></textarea>
-        </div>
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -33,9 +33,7 @@
                     <div class="form-group">
                         <label for="typeCRC" class="h5 mb-4">Predefined CRC types:</label>
                         <select class="form-control" id="typeCRC">
-                            <option th:each="crcCommand : ${listCrcCommands}"
-                                    th:value="${crcCommand.id}"
-                                    th:text="${crcCommand.name}">
+                            <option>
                             </option>
                         </select>
                     </div>
@@ -51,7 +49,7 @@
                         </label>
                     </div>
                 </div>
-                <fieldset th:object="${crc}" id="customCrcParameters" disabled>
+                <fieldset id="customCrcParameters">
                     <label class="h5 mb-4">CRC detailed parameters:</label>
                     <div class="form-group row">
                         <div class="col">
@@ -72,7 +70,8 @@
                     <div class="form-group row">
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="inputReflected" id="inputReflected">
+                                <input class="form-check-input" type="checkbox" name="inputReflected"
+                                       id="inputReflected" value="false">
                                 <label class="form-check-label" for="inputReflected">
                                     Input reflected
                                 </label>
@@ -80,7 +79,8 @@
                         </div>
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="resultReflected" id="resultReflected">
+                                <input class="form-check-input" type="checkbox" name="resultReflected"
+                                       id="resultReflected" value="false">
                                 <label class="form-check-label" for="resultReflected">
                                     Result reflected
                                 </label>
@@ -90,28 +90,90 @@
                     <div class="form-group row">
                         <label for="polynomial" class="col col-form-label">Polynomial:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" th:field="*{polynomial}" id="polynomial" placeholder="0x0000">
+                            <input type="text" class="form-control" name="polynomial" id="polynomial"
+                                   placeholder="0x0000">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="initialValue" class="col col-form-label">Initial Value:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" id="initialValue" th:field="*{initialValue}" placeholder="0x0000">
+                            <input type="text" class="form-control" name="initialValue" id="initialValue"
+                                   placeholder="0x0000">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="finalXorValue" class="col col-form-label">Final Xor Value:</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control" id="finalXorValue" th:field="*{finalXorValue}" placeholder="0x0000">
+                            <input type="text" class="form-control" name="finalXorValue" id="finalXorValue"
+                                   placeholder="0x0000">
                         </div>
                     </div>
                 </fieldset>
             </div>
         </div>
-
-
         <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
     </form>
+    <br/>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Your input:</h5>
+                    <p class="card-text">input</p>
+                    <h5 class="card-title">Input + <span class="text-warning">CRC</span> + <span class="text-primary">Control Bits</span>
+                    </h5>
+                    <p class="card-text" id="message">
+                        <span>000000000000000000000000000000</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Bits to brake:</h5>
+                    <form method="post" id="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="number" class="form-control">
+                                <input type="number" class="form-control">
+                                <input type="number" class="form-control">
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Hamming check</h5>
+                    <h5 class="card-title">Result:</h5>
+                    <p class="card-text">Okay Bad</p>
+                    <br/>
+                    <div>
+                        <h5 class="card-title">Message after fixing:</h5>
+                        <p class="card-text"><span>000000000000000000000</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Crc check</h5>
+                    <h5 class="card-title">Check result:</h5>
+                    <p class="card-text">True</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -119,7 +181,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-<script th:src="@{/js/formSwitching.js}"></script>
-<script th:src="@{/js/setDataForm.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>
