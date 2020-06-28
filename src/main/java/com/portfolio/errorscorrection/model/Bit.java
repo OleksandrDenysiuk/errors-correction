@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Bit {
-    int bit;
+    int value;
     String status;
 }
