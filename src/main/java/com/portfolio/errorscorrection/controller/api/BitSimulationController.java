@@ -18,19 +18,19 @@ public class BitSimulationController {
         this.bitService = bitService;
     }
 
-    @PostMapping("/bit/fix")
+    @PostMapping("/bits/fix")
     public @ResponseBody
     List<Bit> fixBit(List<Bit> bitList, int position){
         return bitService.fixBit(bitList, position);
     }
 
-    @PostMapping("/bit/fix")
+    @PostMapping("/bits/brake")
     public @ResponseBody
     List<Bit> brakeBit(List<Bit> bitList, List<Integer> positions){
         return bitService.brakeBit(bitList, positions);
     }
 
-    @PostMapping("/bit/fix")
+    @PostMapping("/bits/generate")
     public @ResponseBody
     List<Bit> generateBitList(String input){
         return bitService.generateBitList(input);
